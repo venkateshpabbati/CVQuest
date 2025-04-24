@@ -39,8 +39,15 @@ async def create_questions(file: UploadFile):
     Returns:
         str: The generated interview questions.
     """
-    answers = question_maker.create_questions(file.file)
-    return answers
+    try:
+        answers = question_maker.create_questions(file.file)
+        return answers
+    except Exception as e:
+        # Log the detailed error message
+        import logging
+        logging.error("Error occurred while creating questions: %s", str(e))
+        # Return a generic error message to the user
+        return {"error": "An internal error occurred. Please try again later."}
 
 static = FastAPI()
 static.mount('', StaticFiles(directory="./site/build",
