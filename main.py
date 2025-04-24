@@ -41,11 +41,16 @@ async def create_questions(file: UploadFile):
     """
     try:
         answers = question_maker.create_questions(file.file)
+        # Check if the response contains an error message
+        if isinstance(answers, str) and (answers.startswith("API Error") or answers.startswith("JSON Decode Error")):
+            import logging
+            logging.error("Error occurred while creating questions: %s", answers)
+            return {"error": "An internal error occurred. Please try again later."}
         return answers
     except Exception as e:
         # Log the detailed error message
         import logging
-        logging.error("Error occurred while creating questions: %s", str(e))
+        logging.error("Unexpected error occurred while creating questions: %s", str(e))
         # Return a generic error message to the user
         return {"error": "An internal error occurred. Please try again later."}
 
