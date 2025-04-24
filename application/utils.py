@@ -65,9 +65,9 @@ def query_ai(config: OpenAIConfig, prompt: str):
         response_str = response.choices[0].message.content.strip()
         return json.loads(response_str)
 
-    except openai.APIError as api_exc:
+    except openai.APIError:
         # Handle exceptions related to the OpenAI API
-        return f"API Error: {api_exc}"
-    except json.JSONDecodeError as json_exc:
+        return "An error occurred while communicating with the AI service."
+    except json.JSONDecodeError:
         # Handle exceptions related to JSON decoding
-        return f"JSON Decode Error: {json_exc}"
+        return "An error occurred while processing the AI response."
