@@ -46,7 +46,12 @@ async def create_questions(file: UploadFile):
             import logging
             logging.error("Error occurred while creating questions: %s", answers)
             return {"error": "An internal error occurred. Please try again later."}
-        return {"questions": answers} if not isinstance(answers, str) else {"error": "An internal error occurred. Please try again later."}
+        if isinstance(answers, str):
+            # Log the error message if the response is an error
+            import logging
+            logging.error("Error in AI response: %s", answers)
+            return {"error": "An internal error occurred. Please try again later."}
+        return {"questions": answers}
     except Exception as e:
         # Log the detailed error message
         import logging
